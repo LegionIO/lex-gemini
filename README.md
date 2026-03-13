@@ -38,11 +38,42 @@ gem install lex-gemini
 - `update` - Update cached content expiration
 - `delete` - Delete cached content
 
+## Standalone Usage
+
+```ruby
+require 'legion/extensions/gemini/helpers/client'
+
+client = Legion::Extensions::Gemini::Helpers::Client.new(
+  api_key: ENV['GEMINI_API_KEY'],
+  model: 'gemini-2.0-flash'
+)
+
+# Generate content
+result = client.generate_content(
+  contents: [{ parts: [{ text: 'Explain quantum entanglement in one sentence.' }] }]
+)
+puts result.dig('candidates', 0, 'content', 'parts', 0, 'text')
+
+# Generate embeddings
+embedding = client.embed_content(
+  content: { parts: [{ text: 'Hello world' }] },
+  model: 'gemini-embedding-exp'
+)
+puts embedding['embedding']['values'].length
+
+# Count tokens
+tokens = client.count_tokens(
+  contents: [{ parts: [{ text: 'How many tokens?' }] }]
+)
+puts tokens['totalTokens']
+```
+
 ## Requirements
 
 - Ruby >= 3.4
-- [LegionIO](https://github.com/LegionIO/LegionIO) framework
+- [LegionIO](https://github.com/LegionIO/LegionIO) framework (optional for standalone usage)
 - Google Gemini API key ([Get one here](https://ai.google.dev/))
+- `faraday-multipart` gem (optional — required only for multipart file uploads; raw binary upload used as fallback)
 
 ## License
 
