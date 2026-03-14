@@ -1,7 +1,8 @@
 # lex-gemini: Google Gemini API Integration for LegionIO
 
 **Repository Level 3 Documentation**
-- **Category**: `/Users/miverso2/rubymine/legion/extensions-ai/CLAUDE.md`
+- **Parent**: `/Users/miverso2/rubymine/legion/extensions-ai/CLAUDE.md`
+- **Grandparent**: `/Users/miverso2/rubymine/legion/CLAUDE.md`
 
 ## Purpose
 
@@ -9,6 +10,7 @@ Legion Extension that connects LegionIO to Google Gemini API. Generate content, 
 
 **GitHub**: https://github.com/LegionIO/lex-gemini
 **License**: MIT
+**Version**: 0.1.0
 
 ## Architecture
 
