@@ -11,50 +11,52 @@ Legion Extension that connects LegionIO to Google Gemini API. Generate content, 
 **GitHub**: https://github.com/LegionIO/lex-gemini
 **License**: MIT
 **Version**: 0.1.0
+**Specs**: 36 examples
 
 ## Architecture
 
 ```
 Legion::Extensions::Gemini
 ├── Runners/
-│   ├── Content          # Text generation (generate, stream_generate)
-│   ├── Embeddings       # Vector embeddings (embed, batch_embed)
-│   ├── Models           # Model discovery (list, get)
-│   ├── Tokens           # Token counting (count)
-│   ├── Files            # File management (upload, list, get, delete)
-│   └── CachedContents   # Content caching (create, list, get, update, delete)
+│   ├── Content          # generate(api_key:, contents:, model:, ...), stream_generate(...)
+│   ├── Embeddings       # embed(api_key:, content:, model:, ...), batch_embed(...)
+│   ├── Models           # list(api_key:, ...), get(api_key:, name:, ...)
+│   ├── Tokens           # count(api_key:, contents:, model:, ...)
+│   ├── Files            # upload(api_key:, file_path:, mime_type:, ...), list, get, delete
+│   └── CachedContents   # create(api_key:, model:, contents:, ...), list, get, update, delete
 └── Helpers/
-    └── Client           # Faraday-based HTTP client (class, not module)
+    └── Client           # Faraday-based HTTP client (class, instantiated per-request)
 ```
 
-Unlike lex-claude and lex-openai, `Helpers::Client` is a **class** that is instantiated per-request rather than a module with a factory method. Each runner creates a new `Helpers::Client.new(api_key:, model:)` instance.
+Unlike lex-claude and lex-openai, `Helpers::Client` is a **class** instantiated per-request. Each runner creates `Helpers::Client.new(api_key:, model:)` inline. This means no module-level `extend` is used in runners; instead, runners call `Helpers::Client.new(...)` directly.
+
+`include Legion::Extensions::Helpers::Lex` guard: uses `if defined?(Legion::Extensions::Helpers::Lex)` (note: slightly different guard pattern from lex-claude/lex-openai which use `const_defined?`).
+
+## Key Design Decisions
+
+- `Helpers::Client` is a class to allow per-request model selection without global state.
+- Authentication uses query parameter `?key=<api_key>` set on the Faraday connection params, so all requests automatically include it.
+- File upload falls back to raw binary upload (`X-Goog-Upload-Protocol: raw`) when `faraday-multipart` is not loaded.
+- `Helpers::Client#handle_response` returns the raw body on success and `{ error:, status: }` on failure (unlike lex-claude/lex-openai which always return `{ result:, status: }`).
+- `gemini-2.0-flash` is the default model for Content, Tokens, and `Helpers::Client` initialization.
+- `gemini-embedding-exp` is the default model for Embeddings runners.
+
+## API Base URL
+
+`https://generativelanguage.googleapis.com` — path prefix `v1beta` is prepended per-request in `Helpers::Client`.
 
 ## Dependencies
 
 | Gem | Purpose |
 |-----|---------|
-| `faraday` | HTTP client for Gemini REST API |
+| `faraday` >= 2.0 | HTTP client for Gemini REST API |
 | `faraday-multipart` | File uploads (optional — falls back to raw binary upload if not available) |
-
-## API Base URL
-
-`https://generativelanguage.googleapis.com/v1beta`
-
-Authentication via API key query parameter (`?key=`). The key is set on the Faraday connection's params, so all requests automatically include it.
-
-## Default Models
-
-| Runner | Default Model |
-|--------|--------------|
-| Content | `gemini-2.0-flash` |
-| Embeddings | `gemini-embedding-exp` |
-| Tokens | `gemini-2.0-flash` |
 
 ## Testing
 
 ```bash
 bundle install
-bundle exec rspec
+bundle exec rspec        # 36 examples
 bundle exec rubocop
 ```
 

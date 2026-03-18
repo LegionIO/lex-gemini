@@ -8,6 +8,12 @@ Google Gemini API integration for [LegionIO](https://github.com/LegionIO/LegionI
 gem install lex-gemini
 ```
 
+Or add to your Gemfile:
+
+```ruby
+gem 'lex-gemini'
+```
+
 ## Functions
 
 ### Content
@@ -38,6 +44,18 @@ gem install lex-gemini
 - `update` - Update cached content expiration
 - `delete` - Delete cached content
 
+## Configuration
+
+Set your API key in your LegionIO settings:
+
+```json
+{
+  "gemini": {
+    "api_key": "AIza..."
+  }
+}
+```
+
 ## Standalone Usage
 
 ```ruby
@@ -55,9 +73,12 @@ result = client.generate_content(
 puts result.dig('candidates', 0, 'content', 'parts', 0, 'text')
 
 # Generate embeddings
-embedding = client.embed_content(
-  content: { parts: [{ text: 'Hello world' }] },
+embedding_client = Legion::Extensions::Gemini::Helpers::Client.new(
+  api_key: ENV['GEMINI_API_KEY'],
   model: 'gemini-embedding-exp'
+)
+embedding = embedding_client.embed_content(
+  content: { parts: [{ text: 'Hello world' }] }
 )
 puts embedding['embedding']['values'].length
 
@@ -68,12 +89,16 @@ tokens = client.count_tokens(
 puts tokens['totalTokens']
 ```
 
+## Dependencies
+
+- `faraday` >= 2.0 - HTTP client
+- `faraday-multipart` (optional) - required only for multipart file uploads; raw binary upload used as fallback
+
 ## Requirements
 
 - Ruby >= 3.4
 - [LegionIO](https://github.com/LegionIO/LegionIO) framework (optional for standalone usage)
 - Google Gemini API key ([Get one here](https://ai.google.dev/))
-- `faraday-multipart` gem (optional — required only for multipart file uploads; raw binary upload used as fallback)
 
 ## License
 
