@@ -37,7 +37,7 @@ Unlike lex-claude and lex-openai, `Helpers::Client` is a **class** instantiated 
 - `Helpers::Client` is a class to allow per-request model selection without global state.
 - Authentication uses query parameter `?key=<api_key>` set on the Faraday connection params, so all requests automatically include it.
 - File upload falls back to raw binary upload (`X-Goog-Upload-Protocol: raw`) when `faraday-multipart` is not loaded.
-- `Helpers::Client#handle_response` returns the raw body on success and `{ error:, status: }` on failure (unlike lex-claude/lex-openai which always return `{ result:, status: }`).
+- `Helpers::Client#handle_response` returns the raw body on success and `{ error: body, status: code }` on failure. All runners wrap the `Helpers::Client` return value in `{ result: ... }`, so the actual runner-level return shape is `{ result: <body> }` on success and `{ result: { error: ..., status: ... } }` on failure.
 - `gemini-2.0-flash` is the default model for Content, Tokens, and `Helpers::Client` initialization.
 - `gemini-embedding-exp` is the default model for Embeddings runners.
 
