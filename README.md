@@ -1,6 +1,10 @@
 # lex-gemini
 
-Google Gemini API integration for [LegionIO](https://github.com/LegionIO/LegionIO). Generate content, create embeddings, manage files, count tokens, and cache content using Google's Gemini models.
+Google Gemini API integration for LegionIO. Generate content, create embeddings, manage files, count tokens, and cache content using Google's Gemini models.
+
+## Purpose
+
+Wraps the Google Gemini REST API as named runners consumable by any LegionIO task chain. Includes resource-specific operations (file management, content caching) not available through the `legion-llm` unified interface. Use this extension when you need direct access to the full Gemini API surface within the LEX runner/actor lifecycle.
 
 ## Installation
 
@@ -99,6 +103,11 @@ puts tokens['totalTokens']
 - Ruby >= 3.4
 - [LegionIO](https://github.com/LegionIO/LegionIO) framework (optional for standalone usage)
 - Google Gemini API key ([Get one here](https://ai.google.dev/))
+
+## Related
+
+- `legion-llm` — High-level LLM interface including Gemini via ruby_llm
+- `extensions-ai/CLAUDE.md` — Architecture patterns shared across all AI extensions
 
 ## License
 
