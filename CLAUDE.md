@@ -10,7 +10,7 @@ Legion Extension that connects LegionIO to Google Gemini API. Generate content, 
 
 **GitHub**: https://github.com/LegionIO/lex-gemini
 **License**: MIT
-**Version**: 0.1.1
+**Version**: 0.1.2
 **Specs**: 36 examples
 
 ## Architecture
