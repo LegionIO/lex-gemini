@@ -2,6 +2,7 @@
 
 require 'legion/extensions/gemini/version'
 require 'legion/extensions/gemini/helpers/client'
+require 'legion/extensions/gemini/helpers/usage'
 require 'legion/extensions/gemini/runners/content'
 require 'legion/extensions/gemini/runners/embeddings'
 require 'legion/extensions/gemini/runners/models'

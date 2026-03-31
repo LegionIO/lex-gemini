@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.4] - 2026-03-31
+
+### Added
+- `Helpers::Usage` module with `extract_usage` helper that parses `usageMetadata` from Gemini API responses
+- All runner methods now return a `usage:` key with `input_tokens`, `output_tokens`, `cache_read_tokens`, and `cache_write_tokens`
+- Usage specs for all runners and the new `Helpers::Usage` module (80 examples total, up from 36)
+
 ## [0.1.3] - 2026-03-30
 
 ### Changed

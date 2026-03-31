@@ -6,10 +6,12 @@ module Legion
       module Runners
         module Tokens
           include Legion::Extensions::Helpers::Lex if defined?(Legion::Extensions::Helpers::Lex)
+          include Helpers::Usage
 
           def count(api_key:, contents:, model: 'gemini-2.0-flash', **)
             client = Helpers::Client.new(api_key: api_key, model: model)
-            { result: client.count_tokens(contents: contents) }
+            body = client.count_tokens(contents: contents)
+            { result: body, usage: extract_usage(body) }
           end
         end
       end
