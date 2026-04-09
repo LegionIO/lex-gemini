@@ -109,6 +109,10 @@ puts tokens['totalTokens']
 - `legion-llm` — High-level LLM interface including Gemini via ruby_llm
 - `extensions-ai/CLAUDE.md` — Architecture patterns shared across all AI extensions
 
+## Version
+
+0.1.5
+
 ## License
 
 MIT
