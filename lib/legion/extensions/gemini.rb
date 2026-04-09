@@ -9,6 +9,7 @@ require 'legion/extensions/gemini/runners/models'
 require 'legion/extensions/gemini/runners/tokens'
 require 'legion/extensions/gemini/runners/files'
 require 'legion/extensions/gemini/runners/cached_contents'
+require 'legion/extensions/gemini/identity'
 
 module Legion
   module Extensions
